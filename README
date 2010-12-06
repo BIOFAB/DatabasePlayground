@@ -1,0 +1,11 @@
+Load this project up in netbeans and run one of the main methods.
+
+The following is assumed:
+
+  PostgreSQL server listening on localhost port 5432
+  Local copy of BIOFAB database loaded into postgresql under the name "biofab2"
+  Read/write access to biofab2 database using the following credentials:
+    username: biofab
+    password: fiobab
+
+
