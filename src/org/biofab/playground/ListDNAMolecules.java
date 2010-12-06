@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package databaseplayground;
+package org.biofab.playground;
 
 import java.util.Iterator;
 import java.util.List;
@@ -13,10 +13,11 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 /**
+ * This class prints the ID of every DNAMolecule in the DB
  *
  * @author juul
  */
-public class Main {
+public class ListDNAMolecules {
 
     /**
      * @param args the command line arguments
