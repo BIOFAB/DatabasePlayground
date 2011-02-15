@@ -12,120 +12,131 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.biofab.hibernate.HibernateUtil;
-import org.biofab.model.DNAMolecule;
+import org.biofab.model.Design;
 import org.biofab.model.Feature;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
 /**
- * This class first removes all DNAMolecules Features from the db
- * and then re-populates the Features for each DNAMolecule
- * by matching Feature sequences against DNAMolecule sequences
+ * This class first removes all Design Features from the db
+ * and then re-populates the Features for each Design
+ * by matching Feature sequences against Design sequences
  *
- * @author juul
  */
-public class PopulateFeatures {
 
+public class PopulateFeatures
+{
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         PopulateFeatures p = new PopulateFeatures();
-        
     }
 
     Session session;
 
-    public PopulateFeatures() {
+    public PopulateFeatures()
+    {
         session = HibernateUtil.getSessionFactory().openSession();
 
         System.out.println("Running HQL query.");
 
         List features = query("from Feature");
-        List results = query("from DNAMolecule");
+        List designs = query("from Design");
         
-        Iterator it = results.iterator();
-        while(it.hasNext()) {
-            DNAMolecule d = (DNAMolecule) it.next();
-            if(d.getSeq() == null) {
+        Iterator it = designs.iterator();
+        
+        while(it.hasNext())
+        {
+            Design design = (Design)it.next();
+            
+            if(design.getDna_sequence() == null)
+            {
                 continue;
             }
+            
             // Skip N-containing sequences
-            if(checkNs(d.getSeq())) {
+            if(checkNs(design.getDna_sequence()))
+            {
                 System.out.println("Found N");
                 continue;
             }
 
-//            System.out.println("SEQ: " + d.getSeq() + "\n\n\n");
-
-//            printFeatures(d);
-
-            clearFeatures(d);
-
-            createFeatures(d, features);
+            clearFeatures(design);
+            createFeatures(design, features);
         }
-
-
 
         session.close();
     }
 
-    private void clearFeatures(DNAMolecule d) {
-        d.getFeatures().clear();
+    private void clearFeatures(Design design)
+    {
+        design.getFeatures().clear();
         session.beginTransaction();
-        session.update(d);
+        session.update(design);
         session.getTransaction().commit();
     }
 
-    private void printFeatures(DNAMolecule d) {
-        Set<Feature> fs = (Set<Feature>) d.getFeatures();
+    private void printFeatures(Design design)
+    {
+        Set<Feature> fs = (Set<Feature>) design.getFeatures();
         Iterator it =fs.iterator();
-        while(it.hasNext()) {
-            Feature f = (Feature) it.next();
-            System.out.println("f.getSeq() = " + f.getSeq());
+        
+        while(it.hasNext())
+        {
+            Feature feature = (Feature) it.next();
+            System.out.println("feature.getDna_sequence() = " + feature.getDna_sequence());
         }
     }
 
-    private List<Feature> createFeatures(DNAMolecule d, List allFeatures) {
+    private List<Feature> createFeatures(Design design, List allFeatures)
+    {
         ArrayList<Feature> features = new ArrayList<Feature>();
 
         Iterator it = allFeatures.iterator();
-        while(it.hasNext()) {
+        
+        while(it.hasNext())
+        {
             Feature f = (Feature) it.next();
-
-
-
-            createFeature(d, f);
-
+            createFeature(design, f);
         }
 
         return features;
     }
 
-    private void createFeature(DNAMolecule d, Feature f) {
-        Pattern p = Pattern.compile(f.getSeq(), Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(d.getSeq());
-        while(m.find()) {
+    private void createFeature(Design design, Feature feature)
+    {
+        Pattern p = Pattern.compile(feature.getDna_sequence(), Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(design.getDna_sequence());
+        
+        while(m.find())
+        {
             int from = m.start();
             int to = m.start();
-            d.getFeatures().add(f);
+            design.getFeatures().add(feature);
             session.beginTransaction();
-            session.update(d);
+            session.update(design);
             session.getTransaction().commit();
 
         }
     }
 
-    private boolean checkNs(String seq) {
+    private boolean checkNs(String seq)
+    {
         Pattern p = Pattern.compile("N", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(seq);
-        if(m.find()) {
+        
+        if(m.find())
+        {
             return true;
         }
+        
         return false;
     }
 
-    private List query(String hql) {
+    private List query(String hql)
+    {
         Query q = session.createQuery(hql);
         session.beginTransaction();
         List resultList = q.list();
