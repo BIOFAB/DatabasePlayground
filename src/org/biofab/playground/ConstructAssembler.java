@@ -5,43 +5,14 @@
 
 package org.biofab.playground;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.Enumeration;
-import org.biofab.hibernate.HibernateUtil;
-import org.biofab.model.Design;
-import org.hibernate.Query;
-import org.hibernate.Session;
 
-
-import java.io.IOException;
 import java.util.Hashtable;
-import java.sql.SQLException;
+import java.util.Enumeration;
 import java.sql.Statement;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Connection;
 
 import org.biofab.model.Part;
 import org.biojava.bio.seq.DNATools;
-import org.biojava.bio.seq.StrandedFeature;
-import org.biojava.bio.symbol.Edit;
-import org.biojava.bio.symbol.IllegalSymbolException;
-import org.biojava.bio.symbol.RangeLocation;
 import org.biojava.bio.seq.Feature;
-
-import org.biojavax.Namespace;
-import org.biojavax.RichObjectFactory;
-import org.biojavax.SimpleComment;
-import org.biojavax.SimpleNote;
-import org.biojavax.SimpleRichAnnotation;
-
-import org.biofab.model.Part;
-import org.biojava.bio.seq.DNATools;
 import org.biojava.bio.seq.StrandedFeature;
 import org.biojava.bio.symbol.Edit;
 import org.biojava.bio.symbol.IllegalSymbolException;

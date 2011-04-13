@@ -11,7 +11,7 @@ import java.sql.Connection;
 
 public class SequenceAnnotator
 {
-    String      _jdbcDriver = "jdbc:postgresql://localhost:5432/biofab";
+    String      _jdbcDriver = "jdbc:postgresql://localhost:5432/biofab_dev";
     String      _user = "biofab";
     String      _password = "fiobab";
     Connection  _connection = null;
@@ -41,8 +41,9 @@ public class SequenceAnnotator
             _connection = DriverManager.getConnection(_jdbcDriver, _user, _password);
             designsStatement = _connection.createStatement();
             featuresStatement = _connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            designs = designsStatement.executeQuery("SELECT design.id, design.dna_sequence FROM design WHERE design.dna_sequence != 'pending'");
-            features = featuresStatement.executeQuery("SELECT feature.id, feature.dna_sequence FROM feature ORDER BY feature.id ASC");
+            designs = designsStatement.executeQuery("select * from design");
+            features = featuresStatement.executeQuery("SELECT feature.id, feature.dna_sequence FROM feature WHERE feature.id = 45 OR feature.id = 83 OR feature.id = 84 ORDER BY feature.id ASC");
+            System.out.println("design_id,feature_id,start,stop");
 
             while (designs.next())
             {
@@ -58,8 +59,8 @@ public class SequenceAnnotator
 
                     while(matcher.find())
                     {
-                        start = matcher.start() + 1;
-                        stop = matcher.end() + 1;
+                        start = matcher.start();
+                        stop = matcher.end();
                         System.out.println(designID + "," + featureID + "," + String.valueOf(start) + "," + String.valueOf(stop));
                     }
                 }
