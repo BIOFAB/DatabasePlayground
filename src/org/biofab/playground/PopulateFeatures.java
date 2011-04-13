@@ -44,18 +44,18 @@ public class PopulateFeatures
 
         List features = query("from Feature");
         List designs = query("from Design");
-        
+
         Iterator it = designs.iterator();
-        
+
         while(it.hasNext())
         {
             Design design = (Design)it.next();
-            
+
             if(design.getDna_sequence() == null)
             {
                 continue;
             }
-            
+
             // Skip N-containing sequences
             if(checkNs(design.getDna_sequence()))
             {
@@ -82,7 +82,7 @@ public class PopulateFeatures
     {
         Set<Feature> fs = (Set<Feature>) design.getFeatures();
         Iterator it =fs.iterator();
-        
+
         while(it.hasNext())
         {
             Feature feature = (Feature) it.next();
@@ -95,7 +95,7 @@ public class PopulateFeatures
         ArrayList<Feature> features = new ArrayList<Feature>();
 
         Iterator it = allFeatures.iterator();
-        
+
         while(it.hasNext())
         {
             Feature f = (Feature) it.next();
@@ -109,7 +109,7 @@ public class PopulateFeatures
     {
         Pattern p = Pattern.compile(feature.getDna_sequence(), Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(design.getDna_sequence());
-        
+
         while(m.find())
         {
             int from = m.start();
@@ -126,12 +126,12 @@ public class PopulateFeatures
     {
         Pattern p = Pattern.compile("N", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(seq);
-        
+
         if(m.find())
         {
             return true;
         }
-        
+
         return false;
     }
 
